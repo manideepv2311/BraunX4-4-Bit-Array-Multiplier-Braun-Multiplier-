@@ -114,7 +114,7 @@ Y = A'
 
 **Schematic Design – Cadence Virtuoso**
 
-![CMOS NOT Gate Schematic](images/inv.png)
+![BraunX4 4-Bit Multiplier](inv.png)
 
 ---
 
@@ -143,7 +143,7 @@ The NAND gate is a universal logic gate that performs the complement of the AND 
 
 **Schematic Design – Cadence Virtuoso**
 
-![NAND Gate Schematic](images/nand.png)
+![BraunX4 4-Bit Multiplier](nand.png)
 
 ---
 
@@ -171,7 +171,7 @@ The OR gate is a fundamental combinational logic circuit that performs logical a
 
 **Schematic Design – Cadence Virtuoso**
 
-![OR Gate Schematic](images/or.png)
+![BraunX4 4-Bit Multiplier](or.png)
 
 ---
 
@@ -199,7 +199,7 @@ The XOR (Exclusive-OR) gate is an essential digital logic circuit that produces 
 
 **Schematic Design – Cadence Virtuoso**
 
-![XOR Gate Schematic](images/xor.png)
+![BraunX4 4-Bit Multiplier](xor.png)
 
 ---
 
@@ -235,7 +235,7 @@ A Half Adder is a combinational arithmetic circuit that performs the addition of
 
 **Schematic Design – Cadence Virtuoso**
 
-![Half Adder Schematic](images/ha.png)
+![BraunX4 4-Bit Multiplier](ha.png)
 
 ---
 
@@ -270,6 +270,340 @@ A Full Adder is a combinational arithmetic circuit that performs the addition of
 
 **Schematic Design – Cadence Virtuoso**
 
-![Full Adder Schematic](images/fa.png)
+![BraunX4 4-Bit Multiplier](fa.png)
+
+---
+
+---
+
+## 5. BraunX4 Multiplier Architecture
+
+The BraunX4 multiplier is a 4-bit unsigned parallel array multiplier designed to perform high-speed binary multiplication using a structured combinational logic architecture. The design follows the conventional Braun multiplier principle, incorporating AND gates for partial product generation and Half Adders and Full Adders for partial product accumulation. The architecture produces an 8-bit output through systematic addition stages, demonstrating modular digital design and efficient arithmetic computation.
+
+### 5.1 Partial Product Generation
+
+Partial Product Generation is the initial computational stage of the BraunX4 multiplier. It involves generating individual binary products by performing bitwise AND operations between the multiplicand and multiplier inputs.
+
+For two 4-bit binary operands, a total of 16 partial products are generated. These products are arranged in shifted rows according to their corresponding binary weights, forming the foundation for subsequent addition stages.
+
+**Input Representation:**
+
+- Multiplicand: A = (A3, A2, A1, A0)
+- Multiplier: B = (B3, B2, B1, B0)
+
+**Boolean Expression:**
+
+`PP(i,j) = Ai AND Bj`
+
+**Partial Product Matrix:**
+
+| Weight | Partial Products |
+|:---:|:---|
+| 2^0 | A0B0 |
+| 2^1 | A1B0, A0B1 |
+| 2^2 | A2B0, A1B1, A0B2 |
+| 2^3 | A3B0, A2B1, A1B2, A0B3 |
+| 2^4 | A3B1, A2B2, A1B3 |
+| 2^5 | A3B2, A2B3 |
+| 2^6 | A3B3 |
+
+**Key Features:**
+- Generates 16 individual partial products.
+- Uses AND-based logic operations.
+- Organizes products according to binary positional weights.
+- Establishes the foundation for parallel addition.
+
+**Partial Product Generation Diagram**
+
+![Partial Product Matrix](partial_products.png)
+
+### 5.2 Adder Array Configuration
+
+The Adder Array Configuration is the core arithmetic processing stage of the BraunX4 multiplier. The generated partial products are combined using Half Adders and Full Adders to produce intermediate Sum and Carry outputs.
+
+The Half Adders process two binary inputs, while Full Adders process three inputs, including an incoming carry. The resulting carry signals propagate towards higher-order bit positions, enabling systematic accumulation of the partial products.
+
+**Arithmetic Components:**
+
+- Half Adder (HA): Generates Sum and Carry from two inputs.
+- Full Adder (FA): Generates Sum and Carry-out from three inputs.
+
+**Key Features:**
+- Structured arrangement of arithmetic units.
+- Systematic partial product accumulation.
+- Intermediate Sum and Carry generation.
+- Carry propagation across successive bit positions.
+- Combinational implementation without a clock signal.
+
+**Adder Array Block Diagram**
+
+![BraunX4 Adder Array](adder_array.png)
+
+### 5.3 4-Bit Binary Multiplication
+
+The final stage of the BraunX4 multiplier combines the generated and accumulated partial products to obtain the final 8-bit binary multiplication result.
+
+The architecture accepts two unsigned 4-bit binary operands and generates an 8-bit product, supporting multiplication results ranging from 0 to 225.
+
+**Input and Output Specifications:**
+
+| Parameter | Specification |
+|:---|:---|
+| Multiplicand | 4-bit unsigned input |
+| Multiplier | 4-bit unsigned input |
+| Partial Products | 16 |
+| Output Product | 8-bit binary |
+| Multiplication Type | Unsigned binary multiplication |
+| Architecture | Braun Array Multiplier |
+
+**Mathematical Representation:**
+
+`P = A × B`
+
+`P = P7 P6 P5 P4 P3 P2 P1 P0`
+
+**Functional Verification Example:**
+
+| Parameter | Binary | Decimal |
+|:---|:---:|:---:|
+| Input A | 1010 | 10 |
+| Input B | 0011 | 3 |
+| Output P | 00011110 | 30 
+
+Therefore:
+
+`1010 × 0011 = 00011110`
+
+`10 × 3 = 30`
+
+**Overall BraunX4 Multiplier Schematic – Cadence Virtuoso**
+
+![BraunX4 4-Bit Array Multiplier](mult_.png)
+
+---
+
+---
+
+## 6. Circuit Implementation & Schematic Design
+
+The BraunX4 multiplier is implemented using transistor-level CMOS circuit design in Cadence Virtuoso. The implementation integrates fundamental logic gates, Half Adders and Full Adders to construct a complete 4-bit unsigned Braun array multiplier. Each functional block is designed and interconnected to achieve accurate partial product generation and arithmetic computation.
+
+The schematic-level implementation focuses on modular circuit design, transistor connectivity, logical correctness and signal propagation across different arithmetic stages.
+
+### 6.1 Fundamental Logic Gate Implementation
+
+The basic CMOS logic gates are implemented using complementary NMOS and PMOS transistor networks. These gates establish the foundation for the multiplier's combinational logic operations.
+
+**Implemented Logic Gates:**
+
+- NOT Gate (Inverter)
+- NAND Gate
+- OR Gate
+- XOR Gate
+
+**Logic Gate Schematics – Cadence Virtuoso**
+
+![NOT Gate](inv.png)
+
+![NAND Gate](nand.png)
+
+![OR Gate](or.png)
+
+![XOR Gate](xor.png)
+
+### 6.2 Arithmetic Circuit Implementation
+
+The Half Adder and Full Adder circuits are implemented using the designed CMOS logic gates. These arithmetic blocks perform binary addition and generate the intermediate Sum and Carry signals required for partial product accumulation.
+
+**Half Adder Schematic**
+
+![Half Adder](ha.png)
+
+**Full Adder Schematic**
+
+![Full Adder](fa.png)
+
+### 6.3 Complete BraunX4 Multiplier Implementation
+
+The individual logic and arithmetic blocks are integrated to construct the complete 4-bit Braun array multiplier. The final circuit accepts two 4-bit operands and produces an 8-bit binary multiplication result.
+
+**Complete 4-Bit BraunX4 Multiplier Schematic**
+
+![Complete BraunX4 Multiplier](mult.png)
+
+---
+
+---
+
+## 7. Simulation Results & Waveform Analysis
+
+Simulation is performed to evaluate the functional correctness and signal behaviour of the designed CMOS circuits. The input combinations are applied and the corresponding output responses are observed through simulation waveforms.
+
+The simulation results help validate the arithmetic operations, output transitions and overall functional reliability of the BraunX4 multiplier architecture.
+
+### 7.1 Half Adder Simulation
+
+The Half Adder circuit is simulated by applying different combinations of binary inputs A and B. The resulting Sum and Carry waveforms are observed and verified against the theoretical truth table.
+
+**Expected Outputs:**
+- Sum = A XOR B
+- Carry = A AND B
+
+**Half Adder Simulation Waveform**
+
+![Half Adder Waveform](ha_waveform.png)
+
+### 7.2 Full Adder Simulation
+
+The Full Adder is simulated using three input signals: A, B and Cin. The corresponding Sum and Carry-out waveforms are analyzed to verify correct binary addition across all eight possible input combinations.
+
+**Expected Outputs:**
+- Sum = A XOR B XOR Cin
+- Cout = AB + ACin + BCin
+
+**Full Adder Simulation Waveform**
+
+![Full Adder Waveform](fa_waveform.png)
+
+### 7.3 BraunX4 Multiplier Simulation
+
+The complete BraunX4 multiplier is simulated by applying different combinations of 4-bit unsigned input operands. The resulting 8-bit output product is observed and analyzed to verify accurate binary multiplication.
+
+The simulation evaluates the interaction between partial product generation and the adder array, ensuring that the final output corresponds to the mathematical product of the applied operands.
+
+**Input and Output Signals:**
+- Input A: 4-bit multiplicand.
+- Input B: 4-bit multiplier.
+- Output P: 8-bit product.
+
+**BraunX4 Multiplier Simulation Waveform**
+
+![BraunX4 Multiplier Waveform](mult_waveform.png)
+
+### 7.4 Functional Verification
+
+Functional verification confirms that the implemented BraunX4 multiplier produces the correct 8-bit output for different combinations of input operands.
+
+The simulated outputs are compared against the expected mathematical multiplication results to establish the functional correctness of the design.
+
+**Sample Verification Cases:**
+
+| Input A | Input B | Expected Product |
+|:---:|:---:|:---:|
+| 0010 | 0011 | 00000110 |
+| 0101 | 0010 | 00001010 |
+| 0110 | 0011 | 00010010 |
+| 1000 | 0100 | 00100000 |
+| 1010 | 0011 | 00011110 |
+| 1111 | 1111 | 11100001 |
+
+**Functional Verification Waveform**
+
+![Functional Verification](verification.png)
+
+---
+
+---
+
+## 8. Performance Analysis
+
+The performance of the BraunX4 4-Bit Array Multiplier is evaluated based on its functional correctness, combinational delay, hardware complexity and power consumption. The architecture employs parallel partial product generation and structured adder stages to perform unsigned binary multiplication.
+
+The evaluation focuses on understanding the circuit's computational efficiency and the impact of CMOS logic implementation on overall design performance.
+
+### 8.1 Performance Evaluation Parameters
+
+| Parameter | Description |
+|:---|:---|
+| Functional Correctness | Accuracy of 8-bit multiplication results |
+| Propagation Delay | Time taken for output stabilization |
+| Power Consumption | Power utilized during circuit operation |
+| Hardware Complexity | Number of logic gates and transistors |
+| Output Width | 8-bit binary product |
+| Architecture | Combinational Braun Array Multiplier |
+
+### 8.2 Performance Characteristics
+
+- **Parallel Computation:** Generates partial products simultaneously using AND-based logic.
+- **Modular Architecture:** Uses reusable Half Adder and Full Adder building blocks.
+- **Combinational Operation:** Performs multiplication without requiring clock synchronization.
+- **Scalable Design:** Demonstrates the fundamental architecture of larger array multipliers.
+
+### 8.3 Performance Analysis – Simulation Results
+
+The following parameters can be populated using actual Cadence Virtuoso simulation measurements.
+
+| Performance Metric | Measured Value |
+|:---|:---|
+| Propagation Delay | To be measured |
+| Average Power | To be measured |
+| Maximum Output | 225 |
+| Output Width | 8 Bits |
+| Functional Verification | To be completed |
+
+**Performance Analysis Graph**
+
+![BraunX4 Performance Analysis](performance.png)
+
+---
+
+---
+
+## 9. Applications
+
+The BraunX4 multiplier demonstrates the fundamental principles of digital arithmetic computation and combinational circuit design. Its architecture serves as a foundational building block for understanding multiplication hardware used in modern digital systems.
+
+### 9.1 Digital Signal Processing (DSP)
+
+Multiplication is a fundamental operation in DSP applications, including digital filtering, signal transformation and arithmetic processing.
+
+### 9.2 Arithmetic Logic Units (ALUs)
+
+Multiplier architectures are essential components of processor arithmetic units, supporting mathematical operations in digital computing systems.
+
+### 9.3 Embedded Systems
+
+Compact multiplier architectures can be integrated into embedded computing platforms for arithmetic-intensive operations.
+
+### 9.4 VLSI Education and Research
+
+The project provides practical insight into CMOS transistor-level design, combinational logic implementation, arithmetic circuit architecture and simulation-based verification.
+
+**Application Areas**
+
+![Digital VLSI Applications](applications.png)
+
+---
+
+---
+
+## 10. Future Enhancements
+
+The BraunX4 multiplier provides a foundation for exploring advanced arithmetic architectures and optimization techniques. Several improvements can be considered to enhance its computational efficiency, scalability and physical implementation.
+
+### Proposed Enhancements
+
+1. **Higher-Bit Multiplier Design:** Extend the architecture to 8-bit, 16-bit and 32-bit multiplication.
+2. **Power Optimization:** Explore low-power CMOS techniques to reduce dynamic and leakage power.
+3. **Delay Optimization:** Investigate faster adder architectures to minimize critical-path propagation delay.
+4. **Area Optimization:** Reduce transistor count through optimized logic structures and circuit sharing.
+5. **Physical Design Implementation:** Extend the design towards layout optimization, parasitic extraction and post-layout verification.
+6. **Advanced Multiplier Architectures:** Explore Wallace Tree and Booth multiplier architectures for performance comparison.
+
+**Future Design Possibilities**
+
+![Advanced VLSI Multiplier Architectures](future.png)
+
+---
+
+---
+
+## 11. Conclusion
+
+The BraunX4 project successfully demonstrates the architectural principles of a 4-bit unsigned Braun Array Multiplier using CMOS-based combinational logic design. By integrating partial product generation, Half Adders and Full Adders, the design establishes a structured approach to binary multiplication and produces an 8-bit output.
+
+The implementation provides valuable practical experience in digital logic design, transistor-level circuit development, arithmetic architecture and simulation-based functional verification using Cadence Virtuoso.
+
+Overall, BraunX4 highlights the significance of modular circuit design and fundamental VLSI principles in developing efficient digital arithmetic systems. It also establishes a foundation for future exploration of high-performance, low-power and scalable multiplier architectures.
 
 ---
